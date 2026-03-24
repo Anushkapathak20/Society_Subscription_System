@@ -17,33 +17,33 @@ export default function Flats() {
     phone_number: "",
     flat_type: "",
   })
-const validateForm = () => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  const phoneRegex = /^[0-9]{10}$/
-  const allowedHosts = ["gmail", "yahoo", "tothenew", "outlook", "hotmail"]
-  if (!form.owner_name.trim()) {
-    alert("Owner name is required")
-    return false
+  const validateForm = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const phoneRegex = /^[0-9]{10}$/
+    const allowedHosts = ["gmail", "yahoo", "tothenew", "outlook", "hotmail"]
+    if (!form.owner_name.trim()) {
+      alert("Owner name is required")
+      return false
+    }
+    if (!emailRegex.test(form.email)) {
+      alert("Enter valid email")
+      return false
+    }
+    const host = form.email.split("@")[1].split(".")[0]
+    if (!allowedHosts.includes(host.toLowerCase())) {
+      alert("Allowed email providers: gmail, yahoo, tothenew, outlook, hotmail")
+      return false
+    }
+    if (!phoneRegex.test(form.phone_number)) {
+      alert("Phone must be exactly 10 digits")
+      return false
+    }
+    if (!form.flat_number) {
+      alert("Flat number required")
+      return false
+    }
+    return true
   }
-  if (!emailRegex.test(form.email)) {
-    alert("Enter valid email")
-    return false
-  }
-  const host = form.email.split("@")[1].split(".")[0]
-  if (!allowedHosts.includes(host.toLowerCase())) {
-    alert("Allowed email providers: gmail, yahoo, tothenew, outlook, hotmail")
-    return false
-  }
-  if (!phoneRegex.test(form.phone_number)) {
-    alert("Phone must be exactly 10 digits")
-    return false
-  }
-  if (!form.flat_number) {
-    alert("Flat number required")
-    return false
-  }
-  return true
-}
   const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL
   const fetchFlats = async () => {
     const token = localStorage.getItem("token")
@@ -69,7 +69,7 @@ const validateForm = () => {
   }
   const handleSubmit = async (e) => {
     e.preventDefault()
-  if (!validateForm()) return
+    if (!validateForm()) return
     let url = `${BACKEND}/api/flats`
     let method = "POST"
     if (editingFlat) {
@@ -97,6 +97,8 @@ const validateForm = () => {
         phone_number: "",
         flat_type: "",
       })
+    } else {
+      alert(data.error || "An error occurred")
     }
   }
   useEffect(() => {
@@ -122,20 +124,20 @@ const validateForm = () => {
             <FaSearch className="text-gray-400 mr-2" />
             <input type="text" placeholder="Search..." className="w-full py-2 outline-none" value={search} onChange={(e) => setSearch(e.target.value)} />
           </div>
-<button onClick={() => {
-    setEditingFlat(null)
-    setForm({
-      flat_number: "",
-      owner_name: "",
-      email: "",
-      phone_number: "",
-      flat_type: "",
-    }) 
-    setShowModal(true)
-  }}
-  className="flex items-center gap-2 bg-teal-600 text-white px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition">
-  <FaPlus /> Add Flat
-</button>
+          <button onClick={() => {
+            setEditingFlat(null)
+            setForm({
+              flat_number: "",
+              owner_name: "",
+              email: "",
+              phone_number: "",
+              flat_type: "",
+            })
+            setShowModal(true)
+          }}
+            className="flex items-center gap-2 bg-teal-600 text-white px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition">
+            <FaPlus /> Add Flat
+          </button>
         </div>
         <div className="bg-white rounded-lg shadow-sm overflow-hidden">
           <table className="w-full text-sm">
@@ -205,33 +207,33 @@ const validateForm = () => {
                 {editingFlat ? "Edit Flat" : "Add Flat"}
               </h2>
               <form onSubmit={handleSubmit} className="space-y-3">
-<input placeholder="Flat Number" className="w-full p-2 bg-gray-50 rounded shadow-sm" value={form.flat_number} onChange={(e) => setForm({ ...form, flat_number: e.target.value })}
- disabled={!!editingFlat}
-/>
+                <input placeholder="Flat Number" className="w-full p-2 bg-gray-50 rounded shadow-sm" value={form.flat_number} onChange={(e) => setForm({ ...form, flat_number: e.target.value })}
+                  disabled={!!editingFlat}
+                />
                 <input placeholder="Owner Name" className="w-full p-2 bg-gray-50 rounded shadow-sm" value={form.owner_name} onChange={(e) => setForm({ ...form, owner_name: e.target.value })
-                  } />
+                } />
                 <input placeholder="Email" className="w-full p-2 bg-gray-50 rounded shadow-sm" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })
-                  } />
+                } />
 
                 <input placeholder="Phone" maxLength="10" className="w-full p-2 bg-gray-50 rounded shadow-sm" value={form.phone_number} onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, "")
-                    setForm({ ...form, phone_number: value })
-                  }}/>
-{editingFlat ? (
-  <input className="w-full p-2 bg-gray-100 rounded shadow-sm cursor-not-allowed" value={form.flat_type}
-    disabled/>
-) : (
-  <select className="w-full p-2 bg-gray-50 rounded shadow-sm" value={form.flat_type} onChange={(e) =>
-      setForm({ ...form, flat_type: e.target.value })
-    } >
-    <option value="">Select Flat Type</option>
-    <option value="1BHK">1 BHK</option>
-    <option value="2BHK">2 BHK</option>
-    <option value="3BHK">3 BHK</option>
-    <option value="4BHK">4 BHK</option>
-    <option value="Penthouse">Penthouse</option>
-  </select>
-)}
+                  const value = e.target.value.replace(/\D/g, "")
+                  setForm({ ...form, phone_number: value })
+                }} />
+                {editingFlat ? (
+                  <input className="w-full p-2 bg-gray-100 rounded shadow-sm cursor-not-allowed" value={form.flat_type}
+                    disabled />
+                ) : (
+                  <select className="w-full p-2 bg-gray-50 rounded shadow-sm" value={form.flat_type} onChange={(e) =>
+                    setForm({ ...form, flat_type: e.target.value })
+                  } >
+                    <option value="">Select Flat Type</option>
+                    <option value="1BHK">1 BHK</option>
+                    <option value="2BHK">2 BHK</option>
+                    <option value="3BHK">3 BHK</option>
+                    <option value="4BHK">4 BHK</option>
+                    <option value="Penthouse">Penthouse</option>
+                  </select>
+                )}
                 <div className="flex justify-end gap-2 pt-2">
                   <button type="button" onClick={() => setShowModal(false)} className="px-3 py-1 bg-gray-200 rounded">Cancel</button>
                   <button type="submit" className="px-3 py-1 bg-teal-600 text-white rounded shadow-sm hover:shadow-md">Save</button>
@@ -242,4 +244,5 @@ const validateForm = () => {
         )}
       </div>
     </div>
-  )}
+  )
+}

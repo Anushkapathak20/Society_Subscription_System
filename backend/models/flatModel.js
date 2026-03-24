@@ -57,7 +57,9 @@ const createFlat = async (client, flat_number, flat_type, userId) => {
      RETURNING *
     `,
     [flat_number, flat_type, userId])
+
   const flat = flatResult.rows[0]
+  
   const subRes = await client.query(
     ` SELECT monthly_amount
       FROM subscription_plans
@@ -95,6 +97,19 @@ const updateFlat = async (client, flat_number, flat_type, flat_id) => {
     [flat_number, flat_type, flat_id])
   return result.rows[0]
 }
+const checkFlatNumberExists = async (client, flat_number, excludeFlatId = null) => {
+  let query = `SELECT id FROM flats WHERE flat_number = $1`
+  const params = [flat_number]
+
+  if (excludeFlatId) {
+    query += ` AND id != $2`
+    params.push(excludeFlatId)
+  }
+
+  const result = await client.query(query, params)
+  return result.rows.length > 0
+}
+
 const deleteFlat = async (client, flat_id) => {
   const flat = await client.query(
     `SELECT user_id FROM flats WHERE id=$1`,
@@ -116,7 +131,8 @@ module.exports = {
   getFlatUser,
   updateUser,
   updateFlat,
-  deleteFlat
+  deleteFlat,
+  checkFlatNumberExists
 }
 
 

@@ -15,11 +15,9 @@ const authMiddleware = async (req, res, next) => {
                 message: "Token missing"
             })
         }
-        // verify token
         const verified = jwt.verify(
             token,
-            process.env.JWT_SECRET
-        )
+            process.env.JWT_SECRET)
         // store user info in request
         req.user = verified
         // Verify user exists in DB
@@ -27,18 +25,13 @@ const authMiddleware = async (req, res, next) => {
         if (userCheck.rows.length === 0) {
             return res.status(401).json({
                 message: "User no longer exists"
-            })
-        }
+            })}
         next();
     } catch (err) {
         return res.status(401).json({
             message: "Invalid or expired token"
-        })
-
-    }
-
+        })}
 }
-
 module.exports = authMiddleware
 
 

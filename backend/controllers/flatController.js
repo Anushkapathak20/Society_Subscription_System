@@ -43,7 +43,8 @@ exports.getFlats = async (req, res) => {
     res.status(500).json({
       success: false,
       error: err.message
-    })}
+    })
+  }
 }
 exports.createFlat = async (req, res) => {
   const client = await pool.connect()
@@ -54,6 +55,15 @@ exports.createFlat = async (req, res) => {
     }
     const { owner_name, email, phone_number, flat_number, flat_type } = req.body
     await client.query("BEGIN")
+    const flatExists = await flatModel.checkFlatNumberExists(client, flat_number)
+    if (flatExists) {
+      await client.query("ROLLBACK")
+      return res.status(400).json({
+        success: false,
+        error: `Flat number ${flat_number} is already assigned to someone`
+      })
+    }
+
     const userId = await flatModel.createUser(
       client,
       owner_name,
@@ -85,7 +95,7 @@ exports.createFlat = async (req, res) => {
 exports.updateFlat = async (req, res) => {
   const client = await pool.connect()
   try {
-        const error = validateFlat(req.body)
+    const error = validateFlat(req.body)
     if (error) {
       return res.status(400).json({ success: false, error })
     }
@@ -98,6 +108,15 @@ exports.updateFlat = async (req, res) => {
       flat_type
     } = req.body
     await client.query("BEGIN")
+    const flatExists = await flatModel.checkFlatNumberExists(client, flat_number, flat_id)
+    if (flatExists) {
+      await client.query("ROLLBACK")
+      return res.status(400).json({
+        success: false,
+        error: `Flat number ${flat_number} is already assigned to someone`
+      })
+    }
+
     const userId = await flatModel.getFlatUser(client, flat_id)
     if (userId) {
       await flatModel.updateUser(
@@ -106,7 +125,8 @@ exports.updateFlat = async (req, res) => {
         email,
         phone_number,
         userId
-      )}
+      )
+    }
     const flat = await flatModel.updateFlat(
       client,
       flat_number,

@@ -7,13 +7,11 @@ const MONTHS = ["All", "January", "February", "March", "April", "May", "June", "
 export default function Reports() {
   const [selectedMonth, setSelectedMonth] = useState("All")
   const [data, setData] = useState(null)
-  // const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   useEffect(() => {
     const token = localStorage.getItem("token")
     const fetchReport = async () => {
       try {
-        // setLoading(true)
         setError(null)
         let url = ""
         if (selectedMonth === "All") {
@@ -37,9 +35,6 @@ export default function Reports() {
         console.error(err)
         setError("Server error")
       }
-      //  finally {
-      //   setLoading(false)
-      // }
     }
     fetchReport()
   }, [selectedMonth])

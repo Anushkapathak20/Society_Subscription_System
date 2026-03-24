@@ -29,7 +29,7 @@ export default function Dashboard() {
         return res.json()
       })
       .then(res => {
-        console.log("Admin Dashboard API:", res)
+        // console.log("Admin Dashboard API:", res)
         setData({
           totalFlats: res.totalFlats || 0,
           totalCollected: res.totalCollection || 0,

@@ -91,7 +91,6 @@ export default function PayNow() {
               </div>
               <select value={payment_mode} onChange={(e) => setPayment_mode(e.target.value)} className="w-full mt-3 md:mt-4 border p-2 md:p-2.5 text-sm md:text-base rounded-lg">
                 <option>UPI</option>
-                <option>Net Banking</option>
               </select>
               <button onClick={handlePayment} className="w-full mt-4 md:mt-6 py-2.5 md:py-3 text-sm md:text-base bg-teal-600 text-white rounded-lg hover:bg-teal-700">Pay Now</button>
             </>

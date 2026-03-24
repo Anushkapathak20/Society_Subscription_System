@@ -9,7 +9,6 @@ The **Society Subscription System** simplifies the complexities of managing a re
 ## Key Features
 
 - ** Secure Authentication**: Multi-layered auth with Google OAuth 2.0, JWT, and **Role-based Access Control (RBAC)**.
-- ** Password Reset**: Complete "Forgot Password" flow with token-based verification and email integration via `nodemailer`.
 - ** Dedicated Dashboards**: Tailored experiences for both Admins and Residents.
 - ** Payment Entry**: specialized interface for Admins to manually enter and track on-gound payments.
 - ** Flat & Resident Management**: Comprehensive tools for adding, updating, and viewing society data.
